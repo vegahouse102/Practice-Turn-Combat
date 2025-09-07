@@ -11,7 +11,7 @@ public class SkillView : MonoBehaviour
 		if (sequence != null)
 			sequence.onComplete();
 		sequence = DOTween.Sequence();
-		sequence.AppendCallback(() => attackerView.AnimateView(hash)).AppendInterval(2);
+		sequence.AppendCallback(() => attackerView.AnimateView(hash)).AppendInterval(0.5f);
 		return sequence;
 	}
 }
