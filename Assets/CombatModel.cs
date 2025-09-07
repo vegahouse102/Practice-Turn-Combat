@@ -11,6 +11,7 @@ public class CombatModel
 	public event Action<CharacterModel, CharacterModel,SkillModel> OnTurnEnemy;
 	public event Action OnPlayerWin;
 	public event Action OnEnemyWin;
+	public event Action OnExecuteTurn;
 
 	public int PartyStatck { get; private set; }
 	public CombatModel(List<CharacterModel> players, List<CharacterModel> enemise)
@@ -33,14 +34,15 @@ public class CombatModel
 
 	public void Turn()
 	{
+		OnExecuteTurn?.Invoke();
 		if(_mPlayers.Where(v => v.Health>0).Count() == 0)
 		{
-			OnEnemyWin();
+			OnEnemyWin?.Invoke();
 			return;
 		}
 		if (_mEnemies.Where(v => v.Health > 0).Count() == 0)
 		{
-			OnPlayerWin();
+			OnPlayerWin?.Invoke();
 			return;
 		}
 		IEnumerable<CharacterModel> priority = GetCurPriority();
@@ -63,7 +65,8 @@ public class CombatModel
 
 	public IEnumerable<CharacterModel> GetCurPriority()
 	{
-		List<CharacterModel> characters = _mPlayers;
+		List<CharacterModel> characters = new List<CharacterModel>();
+		characters.AddRange(	_mPlayers);
 		characters.AddRange(_mEnemies);
 		characters.Sort((a,b)=>a.CurBehaviour.CompareTo(b.CurBehaviour));
 

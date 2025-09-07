@@ -26,5 +26,12 @@ public class CharacterPresenter : MonoBehaviour
 	private void Awake()
 	{
 		_mModel = new CharacterModel(_mStat, SkillPresenters.Select(v=>v.SkillModel).ToList());
+		_mModel.OnDemaged += (num) => _mView.AnimateView(Animator.StringToHash("Hit"));
+	}
+
+
+	public void FlipX(bool flag)
+	{
+		View.FlipX(flag);
 	}
 }

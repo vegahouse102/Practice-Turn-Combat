@@ -1,8 +1,8 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 public partial class CombatPresenter : MonoBehaviour
 {
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -10,19 +10,23 @@ public partial class CombatPresenter : MonoBehaviour
 	[SerializeField]
 	private CombatView _mView;
 	private List<CharacterPresenter> _mCharacters;
-	private void Start()
-	{
-		_mCombatModel.OnTurnPlayer += OnPlayerTurn;
-		_mCombatModel.OnTurnEnemy += OnEnemyTurn;
-	}
 	public void Init(List<CharacterPresenter> players, List<CharacterPresenter> enemies)
 	{
-
-		_mCharacters = players;
+		_mCharacters = new();
+		_mCharacters.AddRange(players);
 		_mCharacters.AddRange(enemies);
+			
+
+		foreach(var enemy in enemies)
+		{
+			enemy.FlipX(true);
+		}
+
 		_mCombatModel = new CombatModel(
 			players.Select(v => v.Model).ToList()
 			, enemies.Select(v => v.Model).ToList());
+		_mCombatModel.OnTurnPlayer += OnPlayerTurn;
+		_mCombatModel.OnTurnEnemy += OnEnemyTurn;
 		_mCombatModel.Turn();
 	}
 	private  void OnEnemyTurn(CharacterModel enemy, CharacterModel target,SkillModel skill)
@@ -31,12 +35,15 @@ public partial class CombatPresenter : MonoBehaviour
 		CharacterPresenter playerPresenter = FindCharacterPresencter(target);
 		SkillPresenter skillPresenter = FindSkillPresencter(enemyPresenter, skill);
 		skillPresenter.Attack(enemyPresenter, playerPresenter);
-		_mCombatModel.Turn();
+		skillPresenter.OnSkillAnimationFinish += ()=>_mCombatModel.Turn();
+
+		Debug.Log("enemy");
 	}
 	private void OnPlayerTurn(CharacterModel player)
 	{
 		CharacterPresenter playerPresenter = FindCharacterPresencter(player);
-		throw new NotImplementedException();
+		Debug.Log("Player");
+		_mCombatModel.Turn();
 	}
 }
 

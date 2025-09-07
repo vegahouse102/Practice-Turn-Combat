@@ -47,7 +47,18 @@ public partial class CharacterModel
 		OnSpendPartyStack?.Invoke(model.SkillStat.SpendStack);
 		target.GetDamaged(model.SkillStat.Damage);
 	}
-	
+	public bool TryGetPartyStack(out int num)
+	{
+		num = 0;
+		if (OnRequestPartyStack == null)
+			return false;
+		num = OnRequestPartyStack.Invoke();
+		return true;
+	}
+	public void SpendPartyStack(int num)
+	{
+		OnSpendPartyStack?.Invoke(-num);
+	}
 }
 
 partial class CharacterModel

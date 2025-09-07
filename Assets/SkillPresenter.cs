@@ -12,16 +12,23 @@ public class SkillPresenter : MonoBehaviour
 	[SerializeField]
 	private SkillView _mView;
 	public SkillView SkillView { get { return _mView; } }
-
-
-
-	private void Start()
+	private void Awake()
 	{
 		SkillModel = new SkillModel(_mSkillStat);
 	}
+
+	private Sequence sequence;
+
+	public event Action OnSkillAnimationFinish;
 	public void Attack(CharacterPresenter attacker, CharacterPresenter target)
 	{
-		SkillView.AnimateAttack(attacker.View, target.View)
-			.AppendCallback(() => SkillModel.Attack(attacker.Model,target.Model));
+		if (sequence != null)
+		{
+			sequence.onComplete();
+		}
+		sequence = SkillView.AnimateAttack(attacker.View, target.View)
+			.AppendCallback(() => SkillModel.Attack(attacker.Model, target.Model))
+			.AppendInterval(0.5f)
+			.AppendCallback(() => OnSkillAnimationFinish?.Invoke());
 	}
 }
