@@ -2,15 +2,8 @@ using UnityEngine;
 
 public class CombatView : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+	public void OnPlayer(CharacterModel player)
+	{
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	}
 }

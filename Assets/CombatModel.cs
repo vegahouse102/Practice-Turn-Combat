@@ -12,10 +12,23 @@ public class CombatModel
 	public event Action OnPlayerWin;
 	public event Action OnEnemyWin;
 
+	public int PartyStatck { get; private set; }
 	public CombatModel(List<CharacterModel> players, List<CharacterModel> enemise)
 	{
 		this._mPlayers = players;
 		this._mEnemies = enemise;
+
+		foreach(var player in players)
+		{
+			player.StartCombat();
+			player.OnRequestPartyStack += () => PartyStatck;
+			player.OnSpendPartyStack += (num) => PartyStatck -= num;
+		}
+		foreach(var enemy in enemise)
+		{
+			enemy.StartCombat();
+		}
+
 	}
 
 	public void Turn()

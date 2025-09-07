@@ -4,21 +4,21 @@ using UnityEngine;
 
 public partial class CharacterModel
 {
-	private CharacterStatSO statSO;
+	private CharacterStatSO _mStatSO;
 
 	public int Health { get; private set; }
 	public int Defence { get; private set; }
 
-	public int BaseBehaviour { get; private set; }
-
 	public List<SkillModel> Skills { get; private set; }
-
+	public event Func<int> OnRequestPartyStack;
+	public event Action<int> OnSpendPartyStack;
+	public event Action<int> OnDemaged;
 	public event Action OnDied;
 	public CharacterModel(CharacterStatSO statSO,List<SkillModel> skills)
 	{
+		_mStatSO = statSO;
 		Health = statSO.MaxHealth;
 		Defence = statSO.BaseDefence;
-		BaseBehaviour = 10000/statSO.BaseSpeed;
 		Skills = skills;
 	}
 
@@ -31,8 +31,22 @@ public partial class CharacterModel
 		{
 			OnDied?.Invoke();
 		}
+		OnDemaged?.Invoke(damage);
 	}
 
+	public void Attack(CharacterModel target,SkillModel model)
+	{
+		if (OnRequestPartyStack!=null)
+		{
+			int partyStack = OnRequestPartyStack();
+			if(partyStack < model.SkillStat.NeedStack)
+			{
+				return;
+			}
+		}
+		OnSpendPartyStack?.Invoke(model.SkillStat.SpendStack);
+		target.GetDamaged(model.SkillStat.Damage);
+	}
 	
 }
 
@@ -42,10 +56,22 @@ partial class CharacterModel
 	public int CurBehaviour { get; private set; }
 	public void StartCombat()
 	{
-		CurBehaviour = BaseBehaviour;
+		CurBehaviour = GetBaseBehaviour();
 	}
 	public void AddBehaviour()
 	{
-		CurBehaviour += BaseBehaviour;
+		CurBehaviour += GetBaseBehaviour();
 	}
+	public string GetName()
+	{
+		return _mStatSO.Name;
+	}
+	private int GetBaseBehaviour()
+	{
+		if (_mStatSO.BaseSpeed == 0)
+			return 0;
+		return 10000 / _mStatSO.BaseSpeed;
+	}
+
+
 }

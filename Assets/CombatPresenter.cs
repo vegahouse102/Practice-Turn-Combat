@@ -9,13 +9,13 @@ public partial class CombatPresenter : MonoBehaviour
 	private CombatModel _mCombatModel;
 	[SerializeField]
 	private CombatView _mView;
-	private List<CharacterPresencter> _mCharacters;
+	private List<CharacterPresenter> _mCharacters;
 	private void Start()
 	{
 		_mCombatModel.OnTurnPlayer += OnPlayerTurn;
 		_mCombatModel.OnTurnEnemy += OnEnemyTurn;
 	}
-	public void Init(List<CharacterPresencter> players, List<CharacterPresencter> enemies)
+	public void Init(List<CharacterPresenter> players, List<CharacterPresenter> enemies)
 	{
 
 		_mCharacters = players;
@@ -27,26 +27,26 @@ public partial class CombatPresenter : MonoBehaviour
 	}
 	private  void OnEnemyTurn(CharacterModel enemy, CharacterModel target,SkillModel skill)
 	{
-		CharacterPresencter enemyPresenter = FindCharacterPresencter(enemy);
-		CharacterPresencter playerPresenter = FindCharacterPresencter(target);
+		CharacterPresenter enemyPresenter = FindCharacterPresencter(enemy);
+		CharacterPresenter playerPresenter = FindCharacterPresencter(target);
 		SkillPresenter skillPresenter = FindSkillPresencter(enemyPresenter, skill);
 		skillPresenter.Attack(enemyPresenter, playerPresenter);
 		_mCombatModel.Turn();
 	}
 	private void OnPlayerTurn(CharacterModel player)
 	{
-		CharacterPresencter playerPresenter = FindCharacterPresencter(player);
+		CharacterPresenter playerPresenter = FindCharacterPresencter(player);
 		throw new NotImplementedException();
 	}
 }
 
 partial class CombatPresenter
 {
-	private CharacterPresencter FindCharacterPresencter(CharacterModel character)
+	private CharacterPresenter FindCharacterPresencter(CharacterModel character)
 	{
 		return _mCharacters.Where(v => v.Model == character).First();
 	}
-	private SkillPresenter FindSkillPresencter(CharacterPresencter character, SkillModel skill)
+	private SkillPresenter FindSkillPresencter(CharacterPresenter character, SkillModel skill)
 	{ 
 		return character.SkillPresenters .Where(v => v.SkillModel == skill).First();
 	}

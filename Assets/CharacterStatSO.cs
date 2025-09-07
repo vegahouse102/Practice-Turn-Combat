@@ -4,6 +4,10 @@ using UnityEngine;
 public class CharacterStatSO : ScriptableObject
 {
 	[SerializeField]
+	private string _mName;
+	public string Name { get { return _mName; } }
+
+	[SerializeField]
 	private int _mMaxHealth;
 	public int MaxHealth { get {return _mMaxHealth; } }
 
