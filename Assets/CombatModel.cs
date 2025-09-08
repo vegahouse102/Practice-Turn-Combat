@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine.TextCore.Text;
+using UnityEngine;
 
 public class CombatModel
 {
@@ -22,8 +22,8 @@ public class CombatModel
 		foreach(var player in players)
 		{
 			player.StartCombat();
-			player.OnRequestPartyStack += () => PartyStatck;
-			player.OnSpendPartyStack += (num) => PartyStatck -= num;
+			player.OnRequestPartyStack += GetPartyStack;
+			player.OnSpendPartyStack += SpendPartyStack;
 		}
 		foreach(var enemy in enemise)
 		{
@@ -66,13 +66,20 @@ public class CombatModel
 	public IEnumerable<CharacterModel> GetCurPriority()
 	{
 		List<CharacterModel> characters = new List<CharacterModel>();
-		characters.AddRange(	_mPlayers);
+		characters.AddRange(_mPlayers);
 		characters.AddRange(_mEnemies);
 		characters.Sort((a,b)=>a.CurBehaviour.CompareTo(b.CurBehaviour));
-
-		return characters;
+		return characters.Where(v => v.Health>0);
 	}
-
+	private int GetPartyStack()
+	{
+		return PartyStatck;
+	}
+	private void SpendPartyStack(int num)
+	{
+		Debug.Log($"--------------Spend {num}");
+		PartyStatck -= num;
+	}
 	private CharacterModel SelectPlayer()
 	{
 		return _mPlayers.Where(v => v.Health > 0).First();
@@ -80,7 +87,9 @@ public class CombatModel
 
 	private SkillModel SelectSkill(CharacterModel model)
 	{
-		int idx = UnityEngine.Random.Range(0, model.Skills.Count);
+		List<SkillModel> skill = model.Skills.Where(v=> v.CanAttackSkill(model)).ToList();
+		int length = skill.Count;
+		int idx = UnityEngine.Random.Range(0, length);
 		return model.Skills[idx];
 	}
 }

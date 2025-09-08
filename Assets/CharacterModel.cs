@@ -12,7 +12,7 @@ public partial class CharacterModel
 	public List<SkillModel> Skills { get; private set; }
 	public event Func<int> OnRequestPartyStack;
 	public event Action<int> OnSpendPartyStack;
-	public event Action<int> OnDemaged;
+	public event Action<int,int> OnDemaged;//cur,maxhealth
 	public event Action OnDied;
 	public CharacterModel(CharacterStatSO statSO,List<SkillModel> skills)
 	{
@@ -25,27 +25,13 @@ public partial class CharacterModel
 
 	public void GetDamaged(int damage)
 	{
-		damage = UnityEngine.Mathf.Clamp(damage - Defence, 0, damage);
-		Health = UnityEngine.Mathf.Clamp(Health - damage, 0, Health);
+		damage = Mathf.Clamp(damage - Defence, 0, damage);
+		Health = Mathf.Clamp(Health - damage, 0, Health);
 		if (Health == 0)
 		{
 			OnDied?.Invoke();
 		}
-		OnDemaged?.Invoke(damage);
-	}
-
-	public void Attack(CharacterModel target,SkillModel model)
-	{
-		if (OnRequestPartyStack!=null)
-		{
-			int partyStack = OnRequestPartyStack();
-			if(partyStack < model.SkillStat.NeedStack)
-			{
-				return;
-			}
-		}
-		OnSpendPartyStack?.Invoke(model.SkillStat.SpendStack);
-		target.GetDamaged(model.SkillStat.Damage);
+		OnDemaged?.Invoke(Health,_mStatSO.MaxHealth);
 	}
 	public bool TryGetPartyStack(out int num)
 	{
@@ -57,7 +43,7 @@ public partial class CharacterModel
 	}
 	public void SpendPartyStack(int num)
 	{
-		OnSpendPartyStack?.Invoke(-num);
+		OnSpendPartyStack?.Invoke(num);
 	}
 }
 

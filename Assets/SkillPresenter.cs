@@ -24,9 +24,19 @@ public class SkillPresenter : MonoBehaviour
 	{
 		if (sequence != null)
 		{
-			sequence.onComplete();
+			sequence.Complete();
 		}
-		sequence = SkillView.AnimateAttack(attacker.View, target.View)
+		sequence = DOTween.Sequence();
+		if(SkillView == null)
+		{
+			Debug.Log("skillview null");
+		}
+		if(attacker == null || target == null)
+		{
+			Debug.Log("presenter null");
+		} 
+
+		sequence.Append(SkillView.AnimateAttack(attacker.View, target.View))
 			.AppendCallback(() => SkillModel.Attack(attacker.Model, target.Model))
 			.AppendInterval(0.5f)
 			.AppendCallback(() => OnSkillAnimationFinish?.Invoke());

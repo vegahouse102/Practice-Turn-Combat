@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: 1
   m_EditorClassIdentifier: 
   _mName: peng
-  _mDamage: 3
+  _mDamage: 10
   _mNeedStack: 0
   _mSpendStack: -1

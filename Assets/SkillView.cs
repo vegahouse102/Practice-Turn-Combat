@@ -9,7 +9,7 @@ public class SkillView : MonoBehaviour
 	public Sequence AnimateAttack(CharacterView attackerView, CharacterView tartgetView)
 	{
 		if (sequence != null)
-			sequence.onComplete();
+			sequence.Complete();
 		sequence = DOTween.Sequence();
 		sequence.AppendCallback(() => attackerView.AnimateView(hash)).AppendInterval(0.5f);
 		return sequence;

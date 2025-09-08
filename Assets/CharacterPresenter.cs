@@ -26,7 +26,9 @@ public class CharacterPresenter : MonoBehaviour
 	private void Awake()
 	{
 		_mModel = new CharacterModel(_mStat, SkillPresenters.Select(v=>v.SkillModel).ToList());
-		_mModel.OnDemaged += (num) => _mView.AnimateView(Animator.StringToHash("Hit"));
+		_mModel.OnDemaged += (num,max) => _mView.AnimateView(Animator.StringToHash("Hit"));
+		_mModel.OnDemaged += (num, max) => _mView.ChangeHealth(num, max);
+		_mModel.OnDied += () => _mView.AnimateView(Animator.StringToHash("Die"));
 	}
 
 

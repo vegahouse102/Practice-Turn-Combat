@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: CharacterStatSO3
   m_EditorClassIdentifier: 
   _mName: enemy1
-  _mMaxHealth: 40
+  _mMaxHealth: 100
   _mDefence: 6
   _mSpeed: 6

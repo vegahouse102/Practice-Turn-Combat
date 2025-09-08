@@ -1,4 +1,4 @@
-using JetBrains.Annotations;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,23 +10,35 @@ public partial class CombatPresenter : MonoBehaviour
 	[SerializeField]
 	private CombatView _mView;
 	private List<CharacterPresenter> _mCharacters;
+	private List<CharacterPresenter> _mPlayers;
+	private List<CharacterPresenter> _mEnemies;
 	public void Init(List<CharacterPresenter> players, List<CharacterPresenter> enemies)
 	{
 		_mCharacters = new();
 		_mCharacters.AddRange(players);
 		_mCharacters.AddRange(enemies);
-			
+
+		_mPlayers = players;
+		_mEnemies = enemies;
 
 		foreach(var enemy in enemies)
 		{
 			enemy.FlipX(true);
 		}
-
+		foreach(var character in _mCharacters)
+		{
+			foreach(var skill in character.SkillPresenters)
+			{
+				skill.OnSkillAnimationFinish += OnAttackFinished;
+			}
+		}
 		_mCombatModel = new CombatModel(
 			players.Select(v => v.Model).ToList()
 			, enemies.Select(v => v.Model).ToList());
 		_mCombatModel.OnTurnPlayer += OnPlayerTurn;
 		_mCombatModel.OnTurnEnemy += OnEnemyTurn;
+		_mCombatModel.OnPlayerWin += PlayerWin;
+		_mCombatModel.OnEnemyWin += PlayerDefeat;
 		_mCombatModel.Turn();
 	}
 	private  void OnEnemyTurn(CharacterModel enemy, CharacterModel target,SkillModel skill)
@@ -35,15 +47,28 @@ public partial class CombatPresenter : MonoBehaviour
 		CharacterPresenter playerPresenter = FindCharacterPresencter(target);
 		SkillPresenter skillPresenter = FindSkillPresencter(enemyPresenter, skill);
 		skillPresenter.Attack(enemyPresenter, playerPresenter);
-		skillPresenter.OnSkillAnimationFinish += ()=>_mCombatModel.Turn();
-
-		Debug.Log("enemy");
 	}
 	private void OnPlayerTurn(CharacterModel player)
 	{
 		CharacterPresenter playerPresenter = FindCharacterPresencter(player);
-		Debug.Log("Player");
+		CharacterPresenter enemy = _mEnemies.Where(v => v.Model.Health > 0).FirstOrDefault();
+		SkillModel skill = player.Skills.Where(v => v.CanAttackSkill(player)).FirstOrDefault();
+		
+		SkillPresenter skillPresenter = FindSkillPresencter(playerPresenter,skill);
+		skillPresenter.Attack(playerPresenter, enemy);
+	}
+
+	private void OnAttackFinished()
+	{
 		_mCombatModel.Turn();
+	}
+	private void PlayerWin()
+	{
+		Debug.Log("playerwin");
+	}
+	private void PlayerDefeat()
+	{
+		Debug.Log("playerdefeat");
 	}
 }
 
@@ -51,7 +76,7 @@ partial class CombatPresenter
 {
 	private CharacterPresenter FindCharacterPresencter(CharacterModel character)
 	{
-		return _mCharacters.Where(v => v.Model == character).First();
+		return _mCharacters.Where(v => v.Model == character).FirstOrDefault();
 	}
 	private SkillPresenter FindSkillPresencter(CharacterPresenter character, SkillModel skill)
 	{ 

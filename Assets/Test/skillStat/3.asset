@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: 3
   m_EditorClassIdentifier: 
   _mName: gung
-  _mDamage: 20
+  _mDamage: 30
   _mNeedStack: 4
   _mSpendStack: 4

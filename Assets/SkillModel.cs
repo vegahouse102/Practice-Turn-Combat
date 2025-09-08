@@ -9,14 +9,23 @@
 
 	public void Attack(CharacterModel attackerModel, CharacterModel targetModel)
 	{
+		if (CanAttackSkill(attackerModel))
+		{
+			attackerModel.SpendPartyStack(SkillStat.SpendStack);
+			targetModel.GetDamaged(SkillStat.Damage);
+		}
+	}
+	public bool CanAttackSkill(CharacterModel attackerModel)
+	{
 		int num;
 		if (attackerModel.TryGetPartyStack(out num))
 		{
-			if(num < SkillStat.NeedStack)
+			if (num < SkillStat.NeedStack)
 			{
-				return;
+				return false;
 			}
+			return true;
 		}
-		targetModel.GetDamaged(SkillStat.Damage);
+		return true;
 	}
 }

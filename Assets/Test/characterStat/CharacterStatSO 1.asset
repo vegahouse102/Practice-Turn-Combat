@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: CharacterStatSO 1
   m_EditorClassIdentifier: 
   _mName: player1
-  _mMaxHealth: 20
+  _mMaxHealth: 100
   _mDefence: 2
   _mSpeed: 5

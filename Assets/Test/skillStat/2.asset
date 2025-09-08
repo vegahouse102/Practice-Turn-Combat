@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: 2
   m_EditorClassIdentifier: 
   _mName: basicSkill
-  _mDamage: 5
+  _mDamage: 20
   _mNeedStack: 1
   _mSpendStack: 1
