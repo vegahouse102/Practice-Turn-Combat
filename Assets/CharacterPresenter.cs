@@ -29,6 +29,11 @@ public class CharacterPresenter : MonoBehaviour
 		_mModel.OnDemaged += (num,max) => _mView.AnimateView(Animator.StringToHash("Hit"));
 		_mModel.OnDemaged += (num, max) => _mView.ChangeHealth(num, max);
 		_mModel.OnDied += () => _mView.AnimateView(Animator.StringToHash("Die"));
+		
+	}
+	private void Start()
+	{
+		View.SetName(_mModel.GetName());
 	}
 
 

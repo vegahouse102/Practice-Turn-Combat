@@ -61,9 +61,19 @@ public partial class CombatPresenter : MonoBehaviour
 	{
 		CharacterPresenter playerPresenter = FindCharacterPresencter(player);
 		CharacterPresenter enemy = _mEnemies.Where(v => v.Model.Health > 0).FirstOrDefault();
-		SkillModel skill = player.Skills.Where(v => v.CanAttackSkill(player)).FirstOrDefault();
-		
-		SkillPresenter skillPresenter = FindSkillPresencter(playerPresenter,skill);
+		//SkillModel skill = player.Skills.Where(v => v.CanAttackSkill(player)).FirstOrDefault();
+		SkillModel skill;
+
+		//±Ã¾µ¼ö ÀÖÀ¸¸é ±Ã¾²±â
+		if (player.Skills[1].CanAttackSkill(player))
+		{
+			skill = player.Skills[1];
+		}
+		else
+		{
+			skill = player.Skills[2];
+		}
+		SkillPresenter skillPresenter = FindSkillPresencter(playerPresenter, skill);
 		skillPresenter.Attack(playerPresenter, enemy);
 	}
 

@@ -1,4 +1,5 @@
-﻿using UnityEditor.UI;
+﻿using TMPro;
+using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,8 @@ public class CharacterView : MonoBehaviour
 
 	[SerializeField]
 	Slider slider;
+	[SerializeField]
+	TextMeshProUGUI _mPlayerName;
 	SpriteRenderer spriteRenderer;
 
 
@@ -30,5 +33,9 @@ public class CharacterView : MonoBehaviour
 	public void ChangeHealth(int curHealth,int maxHealth)
 	{
 		slider.value = curHealth/(float)maxHealth;
+	}
+	public void SetName(string name)
+	{
+		_mPlayerName.text = name;
 	}
 }
