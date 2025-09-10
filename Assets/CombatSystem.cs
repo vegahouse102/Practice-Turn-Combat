@@ -4,8 +4,6 @@ using UnityEngine;
 public class CombatSystem : MonoBehaviour
 {
 
-	public List<CharacterPresenter> combatPresenters = new List<CharacterPresenter>();
-
 	[SerializeField]
 	private List<CharacterPresenter> players = new();
 	[SerializeField]

@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43f7cc9fe4e653b45a7c0f017e31b080, type: 3}
-  m_Name: 3
+  m_Script: {fileID: 11500000, guid: b7cad1fad82ac5048920b05d5ea2ea41, type: 3}
+  m_Name: enemy3
   m_EditorClassIdentifier: 
-  _mName: gung
-  _mDamage: 60
-  _mNeedStack: 4
-  _mSpendStack: 4
+  _mName: enemy3
+  _mMaxHealth: 100
+  _mDefence: 2
+  _mSpeed: 8
