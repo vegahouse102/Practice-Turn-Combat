@@ -15,4 +15,4 @@ MonoBehaviour:
   _mName: player3
   _mMaxHealth: 100
   _mDefence: 2
-  _mSpeed: 8
+  _mSpeed: 20
