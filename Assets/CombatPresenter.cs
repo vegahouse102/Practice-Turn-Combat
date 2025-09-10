@@ -32,13 +32,22 @@ public partial class CombatPresenter : MonoBehaviour
 				skill.OnSkillAnimationFinish += OnAttackFinished;
 			}
 		}
-		_mCombatModel = new CombatModel(
+
+		{
+			_mCombatModel = new CombatModel(
 			players.Select(v => v.Model).ToList()
 			, enemies.Select(v => v.Model).ToList());
-		_mCombatModel.OnTurnPlayer += OnPlayerTurn;
-		_mCombatModel.OnTurnEnemy += OnEnemyTurn;
-		_mCombatModel.OnPlayerWin += PlayerWin;
-		_mCombatModel.OnEnemyWin += PlayerDefeat;
+			_mCombatModel.OnTurnPlayer += OnPlayerTurn;
+			_mCombatModel.OnTurnEnemy += OnEnemyTurn;
+			_mCombatModel.OnPlayerWin += PlayerWin;
+			_mCombatModel.OnEnemyWin += PlayerDefeat;
+		}
+
+		{
+			_mView.Inisialize(_mCharacters.Count,_mCharacters.Select(v=>v.Model).ToList());
+			_mCombatModel.OnExecuteTurn += () => _mView.UpdatePriorityList (_mCombatModel.GetCurPriority().ToList());
+		}
+
 		_mCombatModel.Turn();
 	}
 	private  void OnEnemyTurn(CharacterModel enemy, CharacterModel target,SkillModel skill)
