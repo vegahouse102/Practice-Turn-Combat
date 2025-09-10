@@ -5,10 +5,14 @@ public class CombatSystem : MonoBehaviour
 {
 
 	public List<CharacterPresenter> combatPresenters = new List<CharacterPresenter>();
+
+	[SerializeField]
+	private List<CharacterPresenter> players = new();
+	[SerializeField]
+	private List<CharacterPresenter> enemies = new();
 	void Start()
 	{
 		CombatPresenter presenter = GetComponent<CombatPresenter>();
-		presenter.Init(new List<CharacterPresenter>() { combatPresenters[0], combatPresenters[1] }
-		, new List<CharacterPresenter>() { combatPresenters[2], combatPresenters[3] });
+		presenter.Init(players,enemies);
 	}
 }
